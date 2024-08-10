@@ -5,6 +5,8 @@ import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 import openai
 
+openai.api_key =  st.secrets["mykey"]
+
 # Load the dataset
 df = pd.read_csv("qa_dataset_with_embeddings.csv")
 
