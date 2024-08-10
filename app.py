@@ -17,9 +17,17 @@ df['Question_Embedding'] = df['Question_Embedding'].apply(ast.literal_eval)
 def get_embedding(text, model="text-embedding-ada-002"):
     return openai.Embedding.create(input=[text], model=model)['data'][0]['embedding']
 
-# Find the most similar question and get its corresponding answer
-    most_similar_index = similarities.idxmax()
-    max_similarity = similarities.max()
+# Function to find the best answer
+def find_best_answer(user_question):
+    # Get embedding for the user's question
+    user_question_embedding = get_embedding(user_question)
+
+    # Calculate cosine similarities for all questions in the dataset
+    df['Similarity'] = df['Question_Embedding'].apply(lambda x: cosine_similarity(x, user_question_embedding))
+
+    # Find the most similar question and get its corresponding answer
+    most_similar_index = df['Similarity'].idxmax()
+    max_similarity = df['Similarity'].max()
 
     # Set a similarity threshold to determine if a question is relevant enough
     similarity_threshold = 0.6  # Adjust this value as needed
@@ -37,7 +45,7 @@ st.title("Health FAQ Assistant")
 user_question = st.text_input("Enter your question:")
 
 # Button to search for an answer
-if st.button('Find Answer'):
+if st.button('Find Answer', key='find_answer'):
     if user_question:
         answer, similarity_score = find_best_answer(user_question)
         st.write(f"Answer: {answer}")
@@ -46,14 +54,14 @@ if st.button('Find Answer'):
         st.write("Please enter a question.")
 
 # Clear button
-if st.button('Clear'):
+if st.button('Clear', key='clear'):
     user_question = ""
     st.experimental_rerun()  # This will reset the input field
 
 # Rating the answer's helpfulness
-if user_question and st.button('Find Answer'):
+if user_question:
     st.write("Was this answer helpful?")
-    rating = st.radio("", ('Yes', 'No'))
+    rating = st.radio("", ('Yes', 'No'), key='rating')
 
     if rating == 'Yes':
         st.write("Thank you for your feedback!")
@@ -64,7 +72,7 @@ if user_question and st.button('Find Answer'):
 st.sidebar.title("Common FAQs")
 
 # Search bar to filter questions
-faq_search = st.sidebar.text_input("Search FAQs:")
+faq_search = st.sidebar.text_input("Search FAQs:", key='faq_search')
 
 # Filter FAQs based on the search input
 filtered_faqs = df[df['Question'].str.contains(faq_search, case=False, na=False)]
