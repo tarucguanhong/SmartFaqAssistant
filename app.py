@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import ast
 import numpy as np
-from sklearn.metrics.pairwise import cosine_similarity
+from openai.embeddings_utils import cosine_similarity
 import openai
 
 openai.api_key =  st.secrets["mykey"]
