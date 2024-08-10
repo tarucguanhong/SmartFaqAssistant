@@ -51,7 +51,7 @@ st.markdown(
     }
     </style>
     <div class="logo-container">
-        <img src="https://github.com/tarucguanhong/SmartFaqAssistant/blob/main/logo.png" class="logo">
+        <img src="https://github.com/tarucguanhong/SmartFaqAssistant/blob/main/logo.png?raw=true" class="logo">
     </div>
     """,
     unsafe_allow_html=True
