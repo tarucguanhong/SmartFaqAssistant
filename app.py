@@ -55,8 +55,7 @@ if st.button('Find Answer', key='find_answer'):
 
 # Clear button
 if st.button('Clear', key='clear'):
-    user_question = ""
-    st.experimental_rerun()  # This will reset the input field
+    st.session_state.user_question = ' '
 
 # Rating the answer's helpfulness
 if user_question:
@@ -79,6 +78,10 @@ filtered_faqs = df[df['Question'].str.contains(faq_search, case=False, na=False)
 
 # Display the filtered FAQs in the sidebar
 st.sidebar.write("Top 10 Matching FAQs:")
-for index, row in filtered_faqs.head(10).iterrows():
-    st.sidebar.write(f"**Q:** {row['Question']}")
-    st.sidebar.write(f"**A:** {row['Answer']}\n")
+for i, (index, row) in enumerate(filtered_faqs.head(10).iterrows(), start=1):
+    st.sidebar.markdown(f"<span style='color:red; font-weight:bold;'>Question {i}:</span>", unsafe_allow_html=True)
+    st.sidebar.markdown(f"<span style='color:black;'>{row['Question']}</span>", unsafe_allow_html=True)
+    st.sidebar.markdown(f"<span style='color:green; font-weight:bold;'>Answer:</span>", unsafe_allow_html=True)
+    st.sidebar.markdown(f"<span style='color:black;'>{row['Answer']}</span>", unsafe_allow_html=True)
+    st.sidebar.markdown("---")  # Add a line to separate each Q&A pair
+
