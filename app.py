@@ -38,6 +38,25 @@ def find_best_answer(user_question):
     else:
         return "I apologize, but I don't have information on that topic yet. Could you please ask other questions?", max_similarity
 
+st.markdown(
+    """
+    <style>
+    .logo-container {
+        display: flex;
+        justify-content: center;
+        padding: 20px 0;
+    }
+    .logo {
+        width: 150px; /* Adjust the size as needed */
+    }
+    </style>
+    <div class="logo-container">
+        <img src="https://github.com/tarucguanhong/SmartFaqAssistant/blob/main/logo.png" class="logo">
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
 # Streamlit interface
 st.title("Health FAQ Assistant")
 
@@ -80,8 +99,8 @@ filtered_faqs = df[df['Question'].str.contains(faq_search, case=False, na=False)
 st.sidebar.write("Top 10 Matching FAQs:")
 for i, (index, row) in enumerate(filtered_faqs.head(10).iterrows(), start=1):
     st.sidebar.markdown(f"<span style='color:red; font-weight:bold;'>Question {i}:</span>", unsafe_allow_html=True)
-    st.sidebar.markdown(f"<span style='color:black;'>{row['Question']}</span>", unsafe_allow_html=True)
+    st.sidebar.markdown(f"<span style='color:white;'>{row['Question']}</span>", unsafe_allow_html=True)
     st.sidebar.markdown(f"<span style='color:green; font-weight:bold;'>Answer:</span>", unsafe_allow_html=True)
-    st.sidebar.markdown(f"<span style='color:black;'>{row['Answer']}</span>", unsafe_allow_html=True)
+    st.sidebar.markdown(f"<span style='color:white;'>{row['Answer']}</span>", unsafe_allow_html=True)
     st.sidebar.markdown("---")  # Add a line to separate each Q&A pair
 
